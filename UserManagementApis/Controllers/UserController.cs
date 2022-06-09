@@ -8,24 +8,31 @@ namespace UserManagementApis.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
 
-        public UserController(UserService userService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
-        // This endpoint refers to fetch all user details.
+        /// <summary>
+        /// This endpoint refers to fetch all users.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/GetAllUsers")]
-        public async Task<List<UserDetails>> GetUserDetails() =>
-            await _userService.GetUserDetails();
+        public async Task<List<UserDetails>> GetAllUsers() =>
+            await _userService.GetUserDetail();
 
-        // This endpoint refers to fetch user details as per the Id.
+        /// <summary>
+        /// This endpoint refers to fetch a user as per the user id.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("api/GetUserById/{UserId}")]
-        public async Task<ActionResult<UserDetails>> GetUserDetailsById(int UserId)
+        [Route("api/GetUserById/{userid}")]
+        public async Task<ActionResult<UserDetails>> GetUserById(int userid)
         {
-            var user = await _userService.GetUserDetailsById(UserId);
+            var user = await _userService.GetUserDetailById(userid);
             if (user is null)
             {
                 return NotFound();
@@ -33,42 +40,55 @@ namespace UserManagementApis.Controllers
             return user;
         }
 
-        // This endpoint refers to create new user entry.
+        /// <summary>
+        /// This endpoint refers to create a new user entry.
+        /// </summary>
+        /// <param name="userDetails"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("api/CreateUser")]
         public async Task<IActionResult> CreateUser(UserDetails userDetails)
         {
             await _userService.CreateUser(userDetails);
-            return CreatedAtAction(nameof(GetUserDetails), new { id = userDetails.UId }, userDetails);
+            return CreatedAtAction(nameof(GetAllUsers), new { id = userDetails.UId }, userDetails);
         }
 
-        // This endpoint refers to update user details as per the Id.
+        /// <summary>
+        /// This endpoint refers to update a user as per the user id.
+        /// </summary>
+        /// <param name="userDetails"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         [HttpPut]
-        [Route("api/UpdateUser/{UserId}")]
-        public async Task<IActionResult> UpdateUser(UserDetails userDetails, int UserId)
+        [Route("api/UpdateUser/{userid}")]
+        public async Task<IActionResult> UpdateUser(UserDetails userDetails, int userid)
         {
-            var userDetail = await _userService.GetUserDetailsById(UserId);
+            var userDetail = await _userService.GetUserDetailById(userid);
             if (userDetail is null)
             {
                 return NotFound();
             }
             userDetails.UId = userDetail.UId;
-            await _userService.UpdateUser(userDetails, UserId);
-            return NoContent();
+            await _userService.UpdateUser(userDetails, userid);
+            return Ok();
         }
 
-        // This endpoint refers to remove user details as per the Id.
+        /// <summary>
+        /// This endpoint refers to remove a user as per the user id.
+        /// </summary>
+        /// <param name="userid"></param>
+        /// <returns></returns>
         [HttpDelete]
-        [Route("api/DeleteUser/{UserId}")]
-        public async Task<IActionResult> DeleteUser(int UserId)
+        [Route("api/DeleteUser/{userid}")]
+        public async Task<IActionResult> DeleteUser(int userid)
         {
-            var userDetail = await _userService.GetUserDetailsById(UserId);
+            var userDetail = await _userService.GetUserDetailById(userid);
             if (userDetail is null)
             {
                 return NotFound();
             }
-            await _userService.DeleteUser(UserId);
-            return NoContent();
+            await _userService.DeleteUser(userid);
+            return Ok();
         }
     }
 }

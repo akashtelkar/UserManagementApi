@@ -4,7 +4,7 @@ using UserManagementApis.Models;
 
 namespace UserManagementApis.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IMongoCollection<UserDetails> _userCollection;
         public UserService(IOptions<UserDatabaseSettings> userDatabaseSettings)
@@ -13,19 +13,19 @@ namespace UserManagementApis.Services
             var mongoDatabase = mongoClient.GetDatabase(userDatabaseSettings.Value.DatabaseName);
             _userCollection = mongoDatabase.GetCollection<UserDetails>(userDatabaseSettings.Value.UserCollectionName);
         }
-        //To fetch all user details.
-        public async Task<List<UserDetails>> GetUserDetails() => await _userCollection.Find(_ => true).ToListAsync();
+        //To fetch all users.
+        public async Task<List<UserDetails>> GetUserDetail() => await _userCollection.Find(_ => true).ToListAsync();
 
-        //To fetch user details as per the Id.
-        public async Task<UserDetails?> GetUserDetailsById(int id) => await _userCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+        //To fetch a user as per the user id.
+        public async Task<UserDetails?> GetUserDetailById(int userid) => await _userCollection.Find(x => x.Id == userid).FirstOrDefaultAsync();
 
-        //To create new user entry.
+        //To create a new user entry.
         public async Task CreateUser(UserDetails userDetails) => await _userCollection.InsertOneAsync(userDetails);
 
-        //To update user details as per the Id.
-        public async Task UpdateUser(UserDetails userDetails, int id) => await _userCollection.ReplaceOneAsync(x => x.Id == id, userDetails);
+        //To update a user as per the user id.
+        public async Task UpdateUser(UserDetails userDetails, int userid) => await _userCollection.ReplaceOneAsync(x => x.Id == userid, userDetails);
 
-        //To remove user details as per the Id.
-        public async Task DeleteUser(int id) => await _userCollection.DeleteOneAsync(x => x.Id == id);
+        //To remove a user as per the user id.
+        public async Task DeleteUser(int userid) => await _userCollection.DeleteOneAsync(x => x.Id == userid);
     }
 }
