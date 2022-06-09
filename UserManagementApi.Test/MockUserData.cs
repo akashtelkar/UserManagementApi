@@ -43,6 +43,72 @@ namespace UserManagementApi.Test
          };
         }
 
+        public static List<UserDetails> GetEmptyUserData()
+        {
+            return new List<UserDetails>();
+        }
+        public static UserDetails NewUserData()
+        {
+            return new UserDetails
+            {
+                Id = 1,
+                UserName = "Mruna",
+                Name = "Telkar",
+                Email = "Amruna@gmail.com",
+                Phone = "1234598736",
+                Website = "Test.com",
+                Address = new AddressInfo
+                {
+                    Street = "kothrud",
+                    Suite = "maharashtra",
+                    City = "Pune",
+                    ZipCode = "123459",
+                    Geo = new GeoInfo
+                    {
+                        Lat = -40.37,
+                        Lng = -31.99
+                    },
+
+                },
+                Company = new CompanyInfo
+                {
+                    CatchPhrase = "Testing",
+                    Name = "IBM",
+                    Bs = "Testing1"
+                },
+            };
+        }
+        public static UserDetails UserDataById(int userId)
+        {
+            return new UserDetails
+            {
+                Id = 1,
+                UserName = "Mruna",
+                Name = "Telkar",
+                Email = "Amruna@gmail.com",
+                Phone = "1234598736",
+                Website = "Test.com",
+                Address = new AddressInfo
+                {
+                    Street = "kothrud",
+                    Suite = "maharashtra",
+                    City = "Pune",
+                    ZipCode = "123459",
+                    Geo = new GeoInfo
+                    {
+                        Lat = -40.37,
+                        Lng = -31.99
+                    },
+
+                },
+                Company = new CompanyInfo
+                {
+                    CatchPhrase = "Testing",
+                    Name = "IBM",
+                    Bs = "Testing1"
+                },
+            };
+        }
     }
 }
 
